@@ -1,18 +1,18 @@
 import React,{useRef,useState} from "react";
-import {clear} from "@testing-library/user-event/dist/clear";
 
 function RefAssignment(){
     const alertRef = useRef(false)
     const timeoutRef = useRef(null)
     const [buttonText,setButtonText] = useState("Click this button to show alert");
     const [input,setInput] = useState("")
+    const inputRef = useRef()
 
     const showAlert = ()=>{
         alertRef.current = true;
         setButtonText("clicked")
         timeoutRef.current = setTimeout(()=>{
             if(alertRef.current){
-                alert("alerted")
+                alert(inputRef.current.value)
             }
         },5000);
     }
@@ -22,9 +22,13 @@ function RefAssignment(){
             clearTimeout(timeoutRef.current)
     }
 
+    const handleInput = (event)=>{
+        setInput(event.target.value)
+    }
+
     return(
         <>
-            <input/>
+            <input value={input} onChange={handleInput} ref={inputRef}/>
             <button onClick={showAlert}>{buttonText}</button>
             {alertRef.current &&<button onClick={cancelAlert}>cancel</button> }
 
